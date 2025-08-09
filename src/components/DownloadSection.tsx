@@ -3,7 +3,6 @@ import { Download, Package, CheckCircle, Monitor, Smartphone } from 'lucide-reac
 import JSZip from 'jszip';
 import { ConversionResult } from '../types';
 
-
 interface DownloadSectionProps {
   result: ConversionResult | null;
 }
