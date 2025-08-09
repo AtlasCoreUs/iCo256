@@ -3,12 +3,35 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "Professional ICO converter up to 256px resolution. Generate perfect multi-size icons for Windows, applications and high-quality favicons.",
+  "keywords": [
+    "ico",
+    "converter",
+    "favicon",
+    "icon",
+    "windows",
+    "png",
+    "svg"
+  ],
+  "author": "ICO256 Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/ico256-converter.git"
+  },
+  "homepage": "https://ico256.app",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
-    "start": "vite preview"
+    "start": "vite preview",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "browser-image-compression": "^2.0.2",
@@ -19,6 +42,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/jest": "^29.5.14",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
@@ -28,10 +55,25 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",
     "globals": "^15.9.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
+    "text-encoding": "^0.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
     "vite": "^5.4.2"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
 }

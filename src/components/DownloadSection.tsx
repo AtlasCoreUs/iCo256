@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Download, Package, CheckCircle, Monitor, Smartphone, Apple } from 'lucide-react';
+import { Download, Package, CheckCircle, Monitor, Smartphone } from 'lucide-react';
 import JSZip from 'jszip';
 import { ConversionResult } from '../types';
-import { UniversalIconConverter } from '../utils/iconConverter';
 
 interface DownloadSectionProps {
   result: ConversionResult | null;

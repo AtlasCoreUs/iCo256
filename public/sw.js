@@ -1,28 +1,52 @@
-const CACHE_NAME = 'ico-zen-v1';
+const CACHE_NAME = 'ico256-v1';
 const urlsToCache = [
-  '/',                   // Page d'accueil
-  '/index.html',         // Fichier HTML
-  '/manifest.json',      // Fichier de manifeste PWA
-  '/icon-192.png',       // Icône pour l'application
-  '/icon-512.png'        // Autre icône
-  // Ne pas inclure les fichiers générés dynamiquement comme @vite/client, main.tsx, etc.
+  '/',
+  '/index.html',
+  '/src/main.tsx',
+  '/src/App.tsx',
+  '/src/index.css'
 ];
 
+// Installation du service worker
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache)) // Ajout des fichiers dans le cache
+      .then((cache) => {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
+      })
   );
 });
 
+// Interception des requêtes
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)   // Recherche dans le cache
+    caches.match(event.request)
       .then((response) => {
+        // Retourner la réponse du cache si elle existe
         if (response) {
-          return response;  // Si trouvé dans le cache, on retourne la réponse
+          return response;
         }
-        return fetch(event.request); // Sinon, on va chercher sur le réseau
-      })
+        
+        // Sinon, faire la requête réseau
+        return fetch(event.request);
+      }
+    )
+  );
+});
+
+// Mise à jour du cache
+self.addEventListener('activate', (event) => {
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
   );
 });
