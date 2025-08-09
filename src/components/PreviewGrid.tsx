@@ -32,22 +32,30 @@ export const PreviewGrid: React.FC<PreviewGridProps> = ({ result }) => {
                     height: Math.max(size, 48)
                   }}
                 >
-                  {sizeData?.dataUrl && (
+                  {sizeData?.dataUrl ? (
                     <img
                       src={sizeData.dataUrl}
-                      alt={`${size}x${size} icon`}
+                      alt={`Icône ${size}x${size}`}
                       width={size}
                       height={size}
                       className="rounded icon-preview"
                       style={{ imageRendering: size <= 64 ? 'pixelated' : 'auto' }}
+                      onError={(e) => {
+                        console.warn(`Erreur lors du chargement de l'image ${size}x${size}:`, e);
+                        e.currentTarget.style.display = 'none';
+                      }}
                     />
+                  ) : (
+                    <div className="text-xs text-gray-400 dark:text-gray-500">
+                      Aucune image
+                    </div>
                   )}
                 </div>
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {size}×{size}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {sizeData?.blob ? `${(sizeData.blob.size / 1024).toFixed(1)}KB` : ''}
+                  {sizeData?.pngBlob ? `${(sizeData.pngBlob.size / 1024).toFixed(1)}KB` : ''}
                 </p>
               </div>
             );

@@ -9,12 +9,12 @@ export const Header: React.FC = () => {
           <Eye className="w-8 h-8 text-white" />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
-          <span className="font-gaoren font-black tracking-wide">iCo256</span>
+          <span className="font-black tracking-wide">iCo256</span>
         </h1>
       </div>
       
       <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-        Générez vos icônes ICO professionnelles en haute résolution.  
+        Générez vos icônes ICO professionnelles en haute résolution, 
         jusqu'à 256px pour Windows, applications et favicons de qualité supérieure.
       </p>
       

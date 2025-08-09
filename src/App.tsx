@@ -15,26 +15,36 @@ function App() {
 
   // Initialize theme from localStorage
   useEffect(() => {
-    const savedTheme = localStorage.getItem('ico256-theme') as 'light' | 'dark' | null;
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-    
-    setTheme(initialTheme);
-    if (initialTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    try {
+      const savedTheme = localStorage.getItem('ico256-theme') as 'light' | 'dark' | null;
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+      
+      setTheme(initialTheme);
+      if (initialTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (error) {
+      console.warn('Erreur lors de l\'initialisation du thème:', error);
+      // Utiliser le thème par défaut en cas d'erreur
+      setTheme('light');
     }
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('ico256-theme', newTheme);
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    try {
+      const newTheme = theme === 'light' ? 'dark' : 'light';
+      setTheme(newTheme);
+      localStorage.setItem('ico256-theme', newTheme);
+      if (newTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (error) {
+      console.warn('Erreur lors du changement de thème:', error);
     }
   };
 
@@ -42,7 +52,8 @@ function App() {
     try {
       await convertImage(file, removeBackground);
     } catch (err) {
-      console.error('Conversion failed:', err);
+      console.error('Échec de la conversion:', err);
+      // L'erreur sera affichée par le composant ImageUpload via le state error
     }
   };
 
@@ -78,9 +89,11 @@ function App() {
                 <button
                   onClick={handleStartOver}
                   className="inline-flex items-center space-x-2 px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm hover:shadow-md"
+                  aria-label="Recommencer la conversion"
+                  title="Recommencer avec une nouvelle image"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  <span>Start Over</span>
+                  <span>Recommencer</span>
                 </button>
               </div>
               

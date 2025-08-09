@@ -19,7 +19,10 @@ export class UniversalIconConverter {
       
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      if (!ctx) continue;
+      if (!ctx) {
+        console.warn(`Impossible d'obtenir le contexte 2D pour la taille ${size}x${size}`);
+        continue;
+      }
 
       canvas.width = size;
       canvas.height = size;
@@ -71,7 +74,10 @@ export class UniversalIconConverter {
     const targetSize = Math.max(512, maxSize); // Au moins 512px pour la base
     
     const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('Impossible d\'obtenir le contexte 2D du canvas');
+    }
     
     canvas.width = targetSize;
     canvas.height = targetSize;
@@ -109,7 +115,10 @@ export class UniversalIconConverter {
     // ÉTAPE 1: Créer une version intermédiaire haute résolution
     const intermediateSize = size * 4; // 4x la taille finale pour plus de détails
     const tempCanvas = document.createElement('canvas');
-    const tempCtx = tempCanvas.getContext('2d')!;
+    const tempCtx = tempCanvas.getContext('2d');
+    if (!tempCtx) {
+      throw new Error('Impossible d\'obtenir le contexte 2D du canvas temporaire');
+    }
     
     tempCanvas.width = intermediateSize;
     tempCanvas.height = intermediateSize;
@@ -330,7 +339,10 @@ export class UniversalIconConverter {
   // Créer un ICO parfaitement compatible
   private static async createPerfectICO(canvas: HTMLCanvasElement): Promise<Blob> {
     const size = canvas.width;
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('Impossible d\'obtenir le contexte 2D du canvas');
+    }
     
     // Obtenir les données RGBA
     const imageData = ctx.getImageData(0, 0, size, size);
@@ -442,6 +454,7 @@ export class UniversalIconConverter {
         if (!canvas) throw new Error(`No canvas for size ${size}`);
         const icoBlob = await this.createPerfectICO(canvas);
         const arrayBuffer = await icoBlob.arrayBuffer();
+        // Extraire les données de l'image (après l'en-tête ICO)
         const imageData = new Uint8Array(arrayBuffer.slice(22));
         return { size, data: imageData };
       })
@@ -501,6 +514,11 @@ export class UniversalIconConverter {
 
   private static loadImage(file: File): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
+      if (!URL.createObjectURL) {
+        reject(new Error('URL.createObjectURL n\'est pas supporté par ce navigateur'));
+        return;
+      }
+      
       const img = new Image();
       img.onload = () => {
         URL.revokeObjectURL(img.src);
@@ -508,23 +526,45 @@ export class UniversalIconConverter {
       };
       img.onerror = () => {
         URL.revokeObjectURL(img.src);
-        reject(new Error('Failed to load image'));
+        reject(new Error('Échec du chargement de l\'image'));
       };
       img.src = URL.createObjectURL(file);
     });
   }
 
   private static canvasToBlob(canvas: HTMLCanvasElement, type: string, quality: number = 1.0): Promise<Blob> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
+      if (!canvas.toBlob) {
+        reject(new Error('canvas.toBlob n\'est pas supporté par ce navigateur'));
+        return;
+      }
+      
       canvas.toBlob((blob) => {
-        resolve(blob || new Blob());
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error('Échec de la conversion du canvas en blob'));
+        }
       }, type, quality);
     });
   }
 
   static validateFile(file: File): boolean {
     const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/svg+xml'];
-    const maxSize = 15 * 1024 * 1024;
-    return validTypes.includes(file.type) && file.size <= maxSize;
+    const maxSize = 15 * 1024 * 1024; // 15MB
+    
+    if (!file || !file.type) {
+      return false;
+    }
+    
+    if (!validTypes.includes(file.type)) {
+      return false;
+    }
+    
+    if (file.size > maxSize) {
+      return false;
+    }
+    
+    return true;
   }
 }

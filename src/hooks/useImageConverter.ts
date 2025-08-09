@@ -43,13 +43,20 @@ export const useImageConverter = () => {
 
       setCurrentResult(result);
       
-      // Sauvegarder dans localStorage pour l'historique
+      // Sauvegarder dans localStorage pour l'historique (sans les blobs)
       try {
         const history = JSON.parse(localStorage.getItem('ico256-history') || '[]');
-        const newHistory = [result, ...history.slice(0, 4)]; // Garder les 5 derniers
+        const historyEntry = {
+          id: result.id,
+          originalFileName: result.originalFile.name,
+          timestamp: result.timestamp,
+          sizes: result.sizes.map(s => ({ size: s.size })),
+          removeBackground: result.removeBackground
+        };
+        const newHistory = [historyEntry, ...history.slice(0, 4)]; // Garder les 5 derniers
         localStorage.setItem('ico256-history', JSON.stringify(newHistory));
       } catch (e) {
-        console.warn('Could not save to localStorage:', e);
+        console.warn('Impossible de sauvegarder dans localStorage:', e);
       }
 
       return result;
