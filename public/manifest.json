@@ -1,27 +1,41 @@
 {
-  "name": "ICO256 - ICO Converter",
+  "name": "ICO256 - Professional ICO Converter",
   "short_name": "ICO256",
-  "description": "Professional ICO converter up to 256px resolution for perfect Windows icons and favicons",
+  "description": "Professional ICO converter up to 256px resolution. Generate perfect multi-size icons for Windows, applications and high-quality favicons.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F8FAFC",
-  "theme_color": "#2563EB",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
   "orientation": "portrait-primary",
+  "categories": ["productivity", "utilities", "graphics"],
+  "lang": "en",
+  "dir": "ltr",
   "icons": [
     {
-      "src": "/icon-192.png",
-      "type": "image/png",
+      "src": "/icon-192x192.png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
-      "src": "/icon-512.png",
-      "type": "image/png",
+      "src": "/icon-512x512.png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "maskable any"
     }
   ],
-  "categories": ["utilities", "productivity"],
-  "lang": "en",
-  "dir": "ltr"
+  "screenshots": [
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshot-narrow.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
 }
