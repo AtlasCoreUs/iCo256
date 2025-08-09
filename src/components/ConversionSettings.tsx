@@ -17,16 +17,16 @@ export const ConversionSettings: React.FC<ConversionSettingsProps> = ({
         boxShadow: '1px -1px 0 1px rgba(34, 211, 238, 0.2), -0.5px 0.5px 0 0.5px rgba(16, 185, 129, 0.2)'
       }}>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Conversion Settings
+          Paramètres de conversion
         </h3>
         
         <div className="flex items-center justify-between">
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Remove Background
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-100">
+              Supprimer l'arrière-plan
             </label>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Make background transparent instead of white
+              Rendre l'arrière-plan transparent au lieu de blanc
             </p>
           </div>
           
@@ -44,7 +44,8 @@ export const ConversionSettings: React.FC<ConversionSettingsProps> = ({
             `}
             role="switch"
             aria-checked={removeBackground}
-            aria-label="Toggle background removal"
+            aria-label="Basculer la suppression d'arrière-plan"
+            title={removeBackground ? 'Désactiver la suppression d\'arrière-plan' : 'Activer la suppression d\'arrière-plan'}
           >
             <span
               className={`

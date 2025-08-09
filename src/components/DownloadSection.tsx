@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Download, Package, CheckCircle, Monitor, Smartphone, Apple } from 'lucide-react';
+import { Download, Package, CheckCircle, Monitor, Smartphone } from 'lucide-react';
 import JSZip from 'jszip';
 import { ConversionResult } from '../types';
-import { UniversalIconConverter } from '../utils/iconConverter';
 
 interface DownloadSectionProps {
   result: ConversionResult | null;
@@ -23,7 +22,9 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ result }) => {
     
     try {
       const blob = format === 'ico' ? sizeData.icoBlob : sizeData.pngBlob;
-      if (!blob) throw new Error(`No ${format} data for size ${size}`);
+      if (!blob) {
+        throw new Error(`Aucune donnée ${format} disponible pour la taille ${size}x${size}`);
+      }
       
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -36,6 +37,9 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ result }) => {
       
       setDownloadComplete(downloadId);
       setTimeout(() => setDownloadComplete(null), 2000);
+    } catch (error) {
+      console.error(`Erreur lors du téléchargement ${format} ${size}x${size}:`, error);
+      alert(`Erreur: ${error instanceof Error ? error.message : 'Téléchargement échoué'}`);
     } finally {
       setDownloading(null);
     }
@@ -49,7 +53,9 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ result }) => {
       
       // Dossier Windows
       const windowsFolder = zip.folder('Windows');
-      windowsFolder?.file('favicon.ico', result.formats.ico);
+      if (result.formats.ico) {
+        windowsFolder?.file('favicon.ico', result.formats.ico);
+      }
       for (const sizeData of result.sizes) {
         if (sizeData.icoBlob) {
           windowsFolder?.file(`icon-${sizeData.size}x${sizeData.size}.ico`, sizeData.icoBlob);
@@ -96,6 +102,9 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ result }) => {
       
       setDownloadComplete('all');
       setTimeout(() => setDownloadComplete(null), 2000);
+    } catch (error) {
+      console.error('Erreur lors de la création du pack universel:', error);
+      alert(`Erreur lors de la création du pack: ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
     } finally {
       setDownloading(null);
     }

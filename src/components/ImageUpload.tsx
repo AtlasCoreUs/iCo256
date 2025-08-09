@@ -31,15 +31,25 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     setDragActive(false);
 
     const files = e.dataTransfer.files;
-    if (files && files[0]) {
-      onFileSelect(files[0]);
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        onFileSelect(file);
+      } else {
+        console.warn('Type de fichier non supporté:', file.type);
+      }
     }
   }, [onFileSelect]);
 
   const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files && files[0]) {
-      onFileSelect(files[0]);
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        onFileSelect(file);
+      } else {
+        console.warn('Type de fichier non supporté:', file.type);
+      }
     }
   }, [onFileSelect]);
 
@@ -132,7 +142,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           onChange={handleFileInput}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           disabled={isProcessing}
-          aria-label="Upload image file"
+          aria-label="Sélectionner un fichier image"
+          title="Cliquez pour sélectionner un fichier image"
         />
         
         <div className="space-y-4">
@@ -161,6 +172,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           {!isProcessing && (
             <button
               type="button"
+              onClick={() => document.querySelector('input[type="file"]')?.click()}
               className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
             >
               Choisir un fichier
