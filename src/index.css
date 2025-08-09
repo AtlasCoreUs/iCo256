@@ -25,3 +25,15 @@ canvas {
   image-rendering: crisp-edges;
   image-rendering: pixelated;
 }
+
+/* Optimisations de performance */
+* {
+  box-sizing: border-box;
+}
+
+/* Améliorer les performances des animations */
+*,
+*::before,
+*::after {
+  backface-visibility: hidden;
+}

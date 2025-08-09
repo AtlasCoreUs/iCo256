@@ -64,9 +64,17 @@ export const useImageConverter = () => {
   }, []);
 
   const clearResult = useCallback(() => {
+    // Nettoyer les URLs d'objets pour éviter les fuites mémoire
+    if (currentResult) {
+      currentResult.sizes.forEach(size => {
+        if (size.dataUrl && size.dataUrl.startsWith('blob:')) {
+          URL.revokeObjectURL(size.dataUrl);
+        }
+      });
+    }
     setCurrentResult(null);
     setError(null);
-  }, []);
+  }, [currentResult]);
 
   return {
     isProcessing,
